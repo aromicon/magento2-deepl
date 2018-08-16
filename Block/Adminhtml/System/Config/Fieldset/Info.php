@@ -52,7 +52,7 @@ class Info extends Fieldset
             <img src="'.$this->getViewFileUrl('Aromicon_Deepl::images/deepl_banner.jpg').'" alt="Deepl Pro Banner." title="Deepl Pro Banner"/>
 </a>
         ';
-            $comment = __('<p>No API Key provided</p>');
+            $comment .= __('<p style="margin-left: 33%; margin-top: 20px"><strong>No API Key provided</strong></p>');
             $element->setComment($comment);
         }
 
