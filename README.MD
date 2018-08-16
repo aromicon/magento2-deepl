@@ -104,6 +104,6 @@ You are looking for Batch Translation from Backend or Console? Try our [Aromicon
 Pull request, issues and features are always welcome.
 
 <p align="center">
-<small>We ❤ Magento. by [aromicon](https://www.aromicon.de)</small><br/>
-<small>Made by [aromicon](https://www.aromicon.de)</small>
+<small>We ❤ Magento.</small><br/>
+  <small>Made by <a href="https://www.aromicon.de" target="_blank">aromicon</a></small>
 </p>
