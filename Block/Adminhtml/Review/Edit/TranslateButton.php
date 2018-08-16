@@ -94,7 +94,7 @@ class TranslateButton extends \Magento\Backend\Block\Widget\Container
     protected function _getTranslateUrl($store)
     {
         return $this->getUrl(
-            'deepl/review/translate',
+            'aromicon_deepl/review/translate',
             ['store' => $store->getId(), 'review_id' => $this->getRequest()->getParam('id')]
         );
     }

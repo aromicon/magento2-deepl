@@ -9,6 +9,8 @@
 
 namespace Aromicon\Deepl\Controller\Adminhtml\Cms;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
 {
     /**
@@ -32,7 +34,7 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -45,6 +47,8 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
             $this->messageManager->addErrorMessage(__('Block couldn\'t be translated'));
         }
 
-        $this->_redirect('cms/block');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('cms/block/');
     }
 }
