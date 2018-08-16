@@ -7,7 +7,7 @@
  * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
  */
 
-namespace Aromicon\Deepl\Controller\Adminhtml\Cms;
+namespace Aromicon\Deepl\Controller\Adminhtml\Cms\Block;
 
 use Magento\Framework\Controller\ResultFactory;
 
@@ -44,7 +44,7 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
         try {
             $this->cmsTranslator->translateAndCopy($blockId, $store);
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Block couldn\'t be translated'));
+            $this->messageManager->addErrorMessage(__('Block couldn\'t be translated. %1', $e->getMessage()));
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
