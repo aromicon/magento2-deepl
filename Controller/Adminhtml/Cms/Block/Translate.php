@@ -7,7 +7,7 @@
  * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
  */
 
-namespace Aromicon\Deepl\Controller\Adminhtml\Cms;
+namespace Aromicon\Deepl\Controller\Adminhtml\Cms\Block;
 
 use Magento\Framework\Controller\ResultFactory;
 
