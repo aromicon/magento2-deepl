@@ -9,6 +9,7 @@
 
 namespace Aromicon\Deepl\Controller\Adminhtml\Catalog\Attribute;
 
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Catalog
@@ -45,7 +46,6 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Catalog
         try {
             $this->attributeTranslator->translateAndCopy($attributeId, $store);
         } catch (\Exception $e) {
-            \Zend_Debug::dump($e->getMessage());die(__FILE__);
             $this->messageManager->addErrorMessage(__('Attribute couldn\'t be translated. %1', $e->getMessage()));
         }
 

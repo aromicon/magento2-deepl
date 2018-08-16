@@ -9,6 +9,7 @@
 
 namespace Aromicon\Deepl\Controller\Adminhtml\Cms\Page;
 
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
@@ -35,7 +36,7 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -49,6 +50,8 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
             $this->messageManager->addErrorMessage(__('Page couldn\'t be translated. %1', $e->getMessage()));
         }
 
-        $this->_redirect('cms/page');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('cms/page/');
     }
 }
