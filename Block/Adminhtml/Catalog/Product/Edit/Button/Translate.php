@@ -36,7 +36,7 @@ class Translate extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Gen
      */
     public function getButtonData()
     {
-        if ($this->getProduct()->isReadonly()) {
+        if ($this->getProduct()->isReadonly() || !$this->config->hasApiKey()) {
             return [];
         }
 

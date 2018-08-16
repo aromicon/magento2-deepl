@@ -90,6 +90,11 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
+    public function hasApiKey($storeId = null)
+    {
+        return !empty($this->getDeeplApiKey($storeId));
+    }
+
     public function getDeeplApiKey($storeId = null)
     {
         return $this->scopeConfig->getValue(

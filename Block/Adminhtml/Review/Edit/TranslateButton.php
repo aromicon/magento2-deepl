@@ -60,7 +60,9 @@ class TranslateButton extends \Magento\Backend\Block\Widget\Container
             'options' => $this->_getTranslateOptions(),
         ];
 
-        $this->buttonList->add('add_new', $addButtonProps);
+        if ($this->config->hasApiKey()) {
+            $this->buttonList->add('translate', $addButtonProps);
+        }
 
         return parent::_prepareLayout();
     }

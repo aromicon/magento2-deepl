@@ -40,7 +40,7 @@ class Translate extends AbstractCategory implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if ($this->getCategory()->isReadonly()) {
+        if ($this->getCategory()->isReadonly() || !$this->config->hasApiKey()) {
             return [];
         }
 
