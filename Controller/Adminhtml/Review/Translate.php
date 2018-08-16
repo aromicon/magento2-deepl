@@ -9,6 +9,8 @@
 
 namespace Aromicon\Deepl\Controller\Adminhtml\Review;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Review
 {
 
@@ -30,6 +32,9 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Review
         parent::__construct($context, $coreRegistry);
     }
 
+    /**
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         $reviewId = $this->getRequest()->getParam('review_id');
@@ -41,6 +46,8 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Review
             $this->messageManager->addErrorMessage(__('Review couldn\'t be translated'));
         }
 
-        $this->_redirect('review/product');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('review/product/');
     }
 }

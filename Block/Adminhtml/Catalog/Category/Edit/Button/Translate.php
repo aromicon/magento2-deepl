@@ -64,7 +64,7 @@ class Translate extends AbstractCategory implements ButtonProviderInterface
             $options[] = [
                 'id_hard' => 'translate_store_'.$store->getId(),
                 'label' => __($store->getName().' '.$this->config->getStoreLanguage($store)),
-                'onclick' => sprintf("location.href = '%s';", $this->getUrl('deepl/catalog_category/translate', [
+                'onclick' => sprintf("location.href = '%s';", $this->getUrl('aromicon_deepl/catalog_category/translate', [
                         'category_id' => $this->getCategory()->getId(),
                         'store' => $store->getId()
                     ]
