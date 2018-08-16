@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Aromicon
+ * @package   Aromicon_Deepl
+ * @author    Stefan Richter <richter@aromicon.de>
+ * @copyright 2018 aromicon GmbH (http://www.aromicon.de)
+ * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="aromicon" translate="label" sortOrder="100000">
+            <label>Aromicon</label>
+        </tab>
+        <section id="deepl" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Deepl Translate</label>
+            <tab>aromicon</tab>
+            <resource>Aromicon_Deepl::config</resource>
+            <group id="about" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <frontend_model>Aromicon\Deepl\Block\Adminhtml\System\Config\Fieldset\Info</frontend_model>
+                <label><![CDATA[Deepl Usage Statistic]]></label>
+            </group>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Deepl General</label>
+                <field id="store" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Default Store</label>
+                    <source_model>Magento\Store\Model\System\Store</source_model>
+                </field>
+            </group>
+            <group id="api" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Deepl API</label>
+                <field id="key" translate="label" type="password" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>API Key</label>
+                </field>
+            </group>
+            <group id="cms" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>CMS Translate</label>
+                <field id="page_fields" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>CMS Page Translateable Fields</label>
+                    <source_model>Aromicon\Deepl\Model\System\Config\PageFields</source_model>
+                </field>
+            </group>
+            <group id="product" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Product Translate</label>
+                <field id="product_fields" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product Translateable Fields</label>
+                    <source_model>Aromicon\Deepl\Model\System\Config\ProductFields</source_model>
+                </field>
+            </group>
+            <group id="category" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Category Translate</label>
+                <field id="category_fields" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Category Translateable Fields</label>
+                    <source_model>Aromicon\Deepl\Model\System\Config\CategoryFields</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

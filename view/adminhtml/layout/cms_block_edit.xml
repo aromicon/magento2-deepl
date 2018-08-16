@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Aromicon
+ * @package   Aromicon_Deepl
+ * @author    Stefan Richter <richter@aromicon.de>
+ * @copyright 2018 aromicon GmbH (http://www.aromicon.de)
+ * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Aromicon\Deepl\Block\Adminhtml\Cms\Block\Edit\TranslateButton"></block>
+        </referenceContainer>
+    </body>
+</page>
