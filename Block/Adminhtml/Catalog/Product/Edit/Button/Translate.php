@@ -60,7 +60,7 @@ class Translate extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Gen
             $options[] = [
                 'id_hard' => 'translate_store_'.$store->getId(),
                 'label' => __($store->getName().' '.$this->config->getStoreLanguage($store)),
-                'onclick' => sprintf("location.href = '%s';", $this->getUrl('deepl/catalog_product/translate', [
+                'onclick' => sprintf("location.href = '%s';", $this->getUrl('aromicon_deepl/catalog_product/translate', [
                         'product_id' => $this->getProduct()->getId(),
                         'store' => $store->getId()
                     ]
