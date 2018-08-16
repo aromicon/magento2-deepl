@@ -14,6 +14,9 @@
             <api>
                 <url>https://api.deepl.com/v1/</url>
             </api>
+            <cms>
+                <page_fields>title,content,content_heading,meta_keywords,meta_description,meta_title,identifier</page_fields>
+            </cms>
             <product>
                 <product_fields>name,short_description,description,meta_title,meta_keywords,meta_description,url_key</product_fields>
             </product>
