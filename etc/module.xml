@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Aromicon
+ * @package   Aromicon_Deepl
+ * @author    Stefan Richter <richter@aromicon.de>
+ * @copyright 2018 aromicon GmbH (http://www.aromicon.de)
+ * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Aromicon_Deepl" setup_version="2.0.0">
+    </module>
+</config>

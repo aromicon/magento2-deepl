@@ -1,0 +1,173 @@
+<?php
+/**
+ * @category  Aromicon
+ * @package   Aromicon_Deepl
+ * @author    Stefan Richter <richter@aromicon.de>
+ * @copyright 2018 aromicon GmbH (http://www.aromicon.de)
+ * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
+ */
+
+namespace Aromicon\Deepl\Model\Client;
+
+use Aromicon\Deepl\Api\TranslatorInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Zend\Http\Request;
+
+class Deepl implements TranslatorInterface
+{
+    const AVAILABLE_LANGUAGES = ['EN','DE','FR','ES','IT','NL','PL'];
+    /**
+     * @var \Aromicon\Deepl\Helper\Config
+     */
+    private $config;
+
+    /**
+     * @var \Zend\Http\Client
+     */
+    private $client;
+
+    private $usage;
+
+    public function __construct(
+        \Aromicon\Deepl\Helper\Config $config,
+        \Zend\Http\Client $client
+    ) {
+        $this->config = $config;
+        $this->client = $client;
+    }
+
+    /**
+     * Translate String from source language to target language
+     * @param $string
+     * @param $sourceLanguage
+     * @param $targetLanguage
+     * @return mixed
+     * @throws LocalizedException
+     */
+    public function translate($string, $sourceLanguage, $targetLanguage)
+    {
+        $request = $this->client->getRequest()
+            ->setUri($this->config->getDeeplApiUrl().'translate')
+            ->setMethod(Request::METHOD_POST);
+
+        if (!in_array($targetLanguage, self::AVAILABLE_LANGUAGES)) {
+            throw new LocalizedException(__('Target Language is not available!'));
+        }
+
+        $post = $request->getPost();
+        $post->set('auth_key', $this->config->getDeeplApiKey())
+            ->set('text', $string)
+            ->set('target_lang', $targetLanguage)
+            ->set('preserve_formatting', 1);
+
+        $request->setPost($post);
+        $result = $this->client->send($request);
+
+        if ($this->_hasError($result)) {
+            $this->_handleError($result);
+        }
+
+        $translate = json_decode($result->getContent(), true);
+
+        if (!isset($translate['translations'][0]['text'])) {
+            throw new LocalizedException(__('Translation is empty.'));
+        }
+
+        $translatedText = $translate['translations'][0]['text'];
+
+        return $translatedText;
+    }
+
+    /**
+     * @return mixed
+     * @throws LocalizedException
+     */
+    public function getUsage()
+    {
+        $request = $this->client->getRequest()
+            ->setUri($this->config->getDeeplApiUrl().'usage')
+            ->setMethod(Request::METHOD_GET);
+
+        $query = $request->getQuery();
+        $query->set('auth_key', $this->config->getDeeplApiKey());
+
+        $request->setQuery($query);
+        $result = $this->client->send($request);
+
+        if ($this->_hasError($result)) {
+            $this->_handleError($result);
+        }
+
+        $usage = json_decode($result->getContent(), true);
+
+        if (!isset($usage['character_count'])) {
+            throw new LocalizedException(__('Usage is empty.'));
+        }
+
+        return $this->usage = $usage;
+    }
+
+    /**
+     * @return mixed
+     * @throws LocalizedException
+     */
+    public function getCharacterLimit()
+    {
+        if (!$this->usage) {
+            $this->getUsage();
+        }
+
+        if (!isset($this->usage['character_limit'])) {
+            return 0;
+        }
+
+        return $this->usage['character_limit'];
+    }
+
+    /**
+     * @return mixed
+     * @throws LocalizedException
+     */
+    public function getCharacterCount()
+    {
+        if (!$this->usage) {
+            $this->getUsage();
+        }
+
+        if (!isset($this->usage['character_count'])) {
+            return 0;
+        }
+
+        return $this->usage['character_count'];
+    }
+
+    /**
+     * @param \Zend\Http\Response $response
+     */
+    protected function _hasError($response)
+    {
+        return $response->getStatusCode() != 200;
+    }
+
+    /**
+     * @param \Zend\Http\Response $response
+     * @throws LocalizedException
+     */
+    protected function _handleError($response)
+    {
+        $status = $response->getStatusCode();
+        if ($status == 400) {
+            throw new LocalizedException(__('Wrong request, please check error message and your parameters.'));
+        } elseif ($status == 403) {
+            throw new LocalizedException(__('Authorization failed. Please supply a valid auth_key parameter.'));
+        } elseif ($status == 413) {
+            throw new LocalizedException(__('Request Entity Too Large. The request size exceeds the current limit.'));
+        } elseif ($status == 429) {
+            throw new LocalizedException(__('Too many requests. Please wait and send your request once again.'));
+        } elseif ($status == 456) {
+            throw new LocalizedException(__('Quota exceeded. The character limit has been reached.'));
+        } else {
+            throw new LocalizedException(__('Status %1. %2.', $status, $response->getReasonPhrase()));
+        }
+    }
+}

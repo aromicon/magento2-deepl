@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Aromicon
+ * @package   Aromicon_Deepl
+ * @author    Stefan Richter <richter@aromicon.de>
+ * @copyright 2018 aromicon GmbH (http://www.aromicon.de)
+ * @license   Commercial https://www.aromicon.de/magento-download-extensions-modules/de/license
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="aromicon_deepl" frontName="deepl">
+            <module name="Aromicon_Deepl" before="Magento_Backend" />
+        </route>
+    </router>
+</config>

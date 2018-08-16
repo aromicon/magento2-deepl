@@ -1,0 +1,32 @@
+{
+    "name": "aromicon/module-deepl",
+    "description": "Magento 2 Extension for Translation via Deepl API",
+    "require": {
+        "php": "~7.0.0|~7.1.0|~7.2.0",
+        "magento/magento-composer-installer": "*"
+    },
+    "suggest": {
+
+    },
+    "type": "magento2-module",
+    "version": "2.0.0",
+    "license": [
+
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Aromicon\\Deepl\\": ""
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Aromicon/Deepl"
+            ]
+        ]
+    }
+}
