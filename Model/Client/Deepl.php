@@ -58,6 +58,7 @@ class Deepl implements TranslatorInterface
         $post->set('auth_key', $this->config->getDeeplApiKey())
             ->set('text', $string)
             ->set('target_lang', $targetLanguage)
+            ->set('tag_handling', 'xml')
             ->set('preserve_formatting', 1);
 
         $request->setPost($post);
