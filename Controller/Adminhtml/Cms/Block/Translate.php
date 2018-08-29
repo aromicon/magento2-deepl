@@ -43,6 +43,7 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
 
         try {
             $this->cmsTranslator->translateAndCopy($blockId, $store);
+            $this->messageManager->addSuccess(__('Block "%1" was copied & translated to Store %2.', $blockId, $store));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('Block couldn\'t be translated. %1', $e->getMessage()));
         }
