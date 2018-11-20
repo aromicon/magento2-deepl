@@ -26,14 +26,34 @@ class Deepl implements TranslatorInterface
      */
     private $client;
 
+    /**
+     * @var int
+     */
     private $usage;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 
     public function __construct(
         \Aromicon\Deepl\Helper\Config $config,
-        \Zend\Http\Client $client
+        \Zend\Http\Client $client,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->config = $config;
         $this->client = $client;
+        $this->logger = $logger;
+    }
+
+    /**
+     * Check if API ist Working
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function isValid()
+    {
+        return $this->getCharacterCount() !== false;
     }
 
     /**
@@ -93,6 +113,7 @@ class Deepl implements TranslatorInterface
         $query->set('auth_key', $this->config->getDeeplApiKey());
 
         $request->setQuery($query);
+
         $result = $this->client->send($request);
 
         if ($this->_hasError($result)) {
@@ -109,13 +130,18 @@ class Deepl implements TranslatorInterface
     }
 
     /**
-     * @return mixed
+     * @return int|false
      * @throws LocalizedException
      */
     public function getCharacterLimit()
     {
         if (!$this->usage) {
-            $this->getUsage();
+            try {
+                $this->getUsage();
+            } catch (LocalizedException $e) {
+                $this->logger->error($e->getMessage());
+                return false;
+            }
         }
 
         if (!isset($this->usage['character_limit'])) {
@@ -126,13 +152,18 @@ class Deepl implements TranslatorInterface
     }
 
     /**
-     * @return mixed
+     * @return int|false
      * @throws LocalizedException
      */
     public function getCharacterCount()
     {
         if (!$this->usage) {
-            $this->getUsage();
+            try {
+                $this->getUsage();
+            } catch (LocalizedException $e) {
+                $this->logger->error($e->getMessage());
+                return false;
+            }
         }
 
         if (!isset($this->usage['character_count'])) {

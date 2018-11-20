@@ -43,8 +43,12 @@ class Info extends Fieldset
             <img src="'.$this->getViewFileUrl('Aromicon_Deepl::images/deepl_banner_api.jpg').'" alt="Deepl Pro Banner." title="Deepl Pro Banner"/>
 </a>
         ';
-            $comment .= __('<p style="margin-left: 33%; margin-top: 20px"><strong>Character Count:</strong> %1</p>', $this->client->getCharacterCount());
-            $comment .= __('<p style="margin-left: 33%"><strong>Character Limit:</strong> %1</p>', $this->client->getCharacterLimit());
+            if ($this->client->isValid()) {
+                $comment .= __('<p style="margin-left: 33%; margin-top: 20px"><strong>Character Count:</strong> %1</p>', $this->client->getCharacterCount());
+                $comment .= __('<p style="margin-left: 33%"><strong>Character Limit:</strong> %1</p>', $this->client->getCharacterLimit());
+            } else {
+                $comment .= __('<p style="margin-left: 33%; margin-top: 20px; color: red"><strong>Authorization failed. Please check your API Key.</strong></p>');
+            }
             $element->setComment($comment);
         } else {
             $comment = '

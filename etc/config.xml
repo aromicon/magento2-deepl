@@ -12,7 +12,7 @@
     <default>
         <deepl>
             <api>
-                <url>https://api.deepl.com/v1/</url>
+                <url>https://api.deepl.com/v2/</url>
             </api>
             <cms>
                 <page_fields>title,content,content_heading,meta_keywords,meta_description,meta_title,identifier</page_fields>
