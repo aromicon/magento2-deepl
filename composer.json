@@ -9,7 +9,7 @@
 
     },
     "type": "magento2-module",
-    "version": "2.0.0.1",
+    "version": "2.0.0.2",
     "license": [
 
     ],
@@ -20,13 +20,5 @@
         "psr-4": {
             "Aromicon\\Deepl\\": ""
         }
-    },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Aromicon/Deepl"
-            ]
-        ]
     }
 }
