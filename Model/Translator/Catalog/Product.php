@@ -14,7 +14,7 @@ class Product
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
-    
+
     /**
      * @var \Aromicon\Deepl\Api\TranslatorInterface
      */
@@ -48,18 +48,22 @@ class Product
      */
     public function translateAndCopy($productId, $toStoreId)
     {
+        $sourceProduct = $this->productRepository->getById($productId, true, $this->config->getSourceStoreId());
         $product = $this->productRepository->getById($productId, true, $toStoreId);
 
         $sourceLanguage = $this->config->getSourceLanguage();
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
 
         $pageFields = $this->config->getTranslatableProductFields();
+
         foreach ($pageFields as $field) {
             if ($product->getData($field) == '') {
                 continue;
             }
 
-            $translatedText = $this->translator->translate($product->getData($field), $sourceLanguage, $targetLanguage);
+            $translatedText = $this->translator
+                ->translate($sourceProduct->getData($field), $sourceLanguage, $targetLanguage);
+
             if ($product->getData($field) == $translatedText) {
                 continue;
             }

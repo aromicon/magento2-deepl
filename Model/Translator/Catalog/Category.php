@@ -14,7 +14,7 @@ class Category
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface
      */
     private $categoryRepository;
-    
+
     /**
      * @var \Aromicon\Deepl\Api\TranslatorInterface
      */
@@ -47,7 +47,8 @@ class Category
      */
     public function translateAndCopy($categoryId, $toStoreId)
     {
-        $product = $this->categoryRepository->get($categoryId, $toStoreId);
+        $sourceCategory = $this->categoryRepository->get($categoryId, $this->config->getSourceStoreId());
+        $category = $this->categoryRepository->get($categoryId, $toStoreId);
 
         $sourceLanguage = $this->config->getSourceLanguage();
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
@@ -55,17 +56,19 @@ class Category
         $categoryFields = $this->config->getTranslatableCategoryFields();
 
         foreach ($categoryFields as $field) {
-            if ($product->getData($field) == '') {
+            if ($category->getData($field) == '') {
                 continue;
             }
 
-            $translatedText = $this->translator->translate($product->getData($field), $sourceLanguage, $targetLanguage);
-            if ($product->getData($field) == $translatedText) {
+            $translatedText = $this->translator
+                ->translate($sourceCategory->getData($field), $sourceLanguage, $targetLanguage);
+
+            if ($category->getData($field) == $translatedText) {
                 continue;
             }
 
-            $product->setData($field, $translatedText);
-            $this->categoryResource->saveAttribute($product, $field);
+            $category->setData($field, $translatedText);
+            $this->categoryResource->saveAttribute($category, $field);
         }
     }
 }

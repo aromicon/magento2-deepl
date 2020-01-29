@@ -21,16 +21,22 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEEPL_CMS_PAGE_FIELDS = 'deepl/cms/page_fields';
     const XML_PATH_DEEPL_PRODUCT_FIELDS = 'deepl/product/product_fields';
     const XML_PATH_DEEPL_CATEGORY_FIELDS = 'deepl/category/category_fields';
+    const XML_PATH_DEEPL_LOG_ENABLE = 'deepl/log/enable_log';
 
     /**
      * @var \Aromicon\Deepl\Model\System\Config\PageFields
      */
-    protected $pageFields;
+    private $pageFields;
 
     /**
      * @var \Aromicon\Deepl\Model\System\Config\ProductFields
      */
-    protected $productFields;
+    private $productFields;
+
+    /**
+     * @var \Aromicon\Deepl\Model\System\Config\ProductFields
+     */
+    private $categoryFields;
 
     public function __construct(
         Context $context,
@@ -40,6 +46,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     ) {
         $this->pageFields = $pageFields;
         $this->productFields = $productFields;
+        $this->categoryFields = $categoryFields;
         parent::__construct($context);
     }
 
@@ -57,14 +64,16 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
         $currentLocale = 'en';
         $languages = (new LanguageBundle())->get($currentLocale)['Languages'];
-        $countries = (new RegionBundle())->get($currentLocale)['Countries'];
 
         $language = \Locale::getPrimaryLanguage($locale);
-        $country = \Locale::getRegion($locale);
 
         return  $label = $languages[$language];
     }
 
+    /**
+     * @param $storeId
+     * @return mixed|null|string|string[]
+     */
     public function getLanguageCodeByStoreId($storeId)
     {
         return mb_strtoupper(mb_substr($this->scopeConfig->getValue(
@@ -74,6 +83,21 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         ), 0, 2));
     }
 
+    /**
+     * @return mixed|null|string|string[]
+     */
+    public function getSourceStoreId()
+    {
+        $storeId = $this->scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_STORE
+        );
+
+        return $storeId;
+    }
+
+    /**
+     * @return mixed|null|string|string[]
+     */
     public function getSourceLanguage()
     {
         $storeId = $this->scopeConfig->getValue(
@@ -83,6 +107,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->getLanguageCodeByStoreId($storeId);
     }
 
+    /**
+     * @return mixed
+     */
     public function getDeeplApiUrl()
     {
         return $this->scopeConfig->getValue(
@@ -90,11 +117,19 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
+    /**
+     * @param null $storeId
+     * @return bool
+     */
     public function hasApiKey($storeId = null)
     {
         return !empty($this->getDeeplApiKey($storeId));
     }
 
+    /**
+     * @param null $storeId
+     * @return mixed
+     */
     public function getDeeplApiKey($storeId = null)
     {
         return $this->scopeConfig->getValue(
@@ -104,6 +139,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getTranslatablePageFields()
     {
         $fields = $this->scopeConfig->getValue(
@@ -123,6 +161,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         return $fields;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getTranslatableProductFields()
     {
         $fields = $this->scopeConfig->getValue(
@@ -142,6 +183,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         return $fields;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getTranslatableCategoryFields()
     {
         $fields = $this->scopeConfig->getValue(
@@ -159,5 +203,16 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $fields;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isLogEnabled()
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DEEPL_LOG_ENABLE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

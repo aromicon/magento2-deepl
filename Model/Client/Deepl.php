@@ -84,6 +84,11 @@ class Deepl implements TranslatorInterface
         $request->setPost($post);
         $result = $this->client->send($request);
 
+        if ($this->config->isLogEnabled()) {
+            $this->logger->info('Deepl Request', [$post]);
+            $this->logger->info('Deepl Response', [$result]);
+        }
+
         if ($this->_hasError($result)) {
             $this->_handleError($result);
         }
@@ -113,7 +118,6 @@ class Deepl implements TranslatorInterface
         $query->set('auth_key', $this->config->getDeeplApiKey());
 
         $request->setQuery($query);
-
         $result = $this->client->send($request);
 
         if ($this->_hasError($result)) {
