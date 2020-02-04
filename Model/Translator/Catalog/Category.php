@@ -56,7 +56,7 @@ class Category
         $categoryFields = $this->config->getTranslatableCategoryFields();
 
         foreach ($categoryFields as $field) {
-            if ($category->getData($field) == '') {
+            if ($sourceCategory->getData($field) == '') {
                 continue;
             }
 

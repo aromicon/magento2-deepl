@@ -57,7 +57,7 @@ class Product
         $pageFields = $this->config->getTranslatableProductFields();
 
         foreach ($pageFields as $field) {
-            if ($product->getData($field) == '') {
+            if ($sourceProduct->getData($field) == '') {
                 continue;
             }
 
