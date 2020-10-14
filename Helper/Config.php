@@ -16,6 +16,8 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
     const XML_PATH_DEFAULT_STORE = 'deepl/general/store';
+    const XML_PATH_DEFAULT_SPLIT_SENTENCE = 'deepl/general/split_sentence';
+    const XML_PATH_DEFAULT_FORMALITY = 'deepl/general/formality';
     const XML_PATH_DEEPL_API_URL = 'deepl/api/url';
     const XML_PATH_DEEPL_API_KEY = 'deepl/api/key';
     const XML_PATH_DEEPL_CMS_PAGE_FIELDS = 'deepl/cms/page_fields';
@@ -214,5 +216,33 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             self::XML_PATH_DEEPL_LOG_ENABLE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSplitSentences()
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_SPLIT_SENTENCE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFormality()
+    {
+        $formality = $this->scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_FORMALITY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        if (empty($formality)) {
+            $formality = 'default';
+        }
+
+        return $formality;
     }
 }

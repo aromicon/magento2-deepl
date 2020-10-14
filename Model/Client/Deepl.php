@@ -77,9 +77,12 @@ class Deepl implements TranslatorInterface
         $post = $request->getPost();
         $post->set('auth_key', $this->config->getDeeplApiKey())
             ->set('text', $string)
+            ->set('source_lang', $sourceLanguage)
             ->set('target_lang', $targetLanguage)
             ->set('tag_handling', 'xml')
-            ->set('preserve_formatting', 1);
+            ->set('preserve_formatting', 1)
+            ->set('split_sentences', $this->config->getSplitSentences())
+            ->set('formality', $this->config->getFormality());
 
         $request->setPost($post);
         $result = $this->client->send($request);
