@@ -33,6 +33,14 @@
                 <field id="key" translate="label" type="password" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>API Key</label>
                 </field>
+                <field id="split_sentence" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Split Sentences</label>
+                    <source_model>Aromicon\Deepl\Model\System\Config\SplitSentence</source_model>
+                </field>
+                <field id="formality" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Formality</label>
+                    <source_model>Aromicon\Deepl\Model\System\Config\Formality</source_model>
+                </field>
             </group>
             <group id="cms" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>CMS Translate</label>
