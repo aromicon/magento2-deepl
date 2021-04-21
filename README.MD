@@ -7,17 +7,37 @@ attributes, ratings and categories with the help of DeepL API.
   <img width="460" height="300" src="https://www.aromicon.de/magento-download-extensions-modules/media/catalog/product/a/r/aromicon_deepl_magento2_extension_box.jpg">
 </p>
 
-A DeepL API Key is required and can be created [here](https://www.deepl.com/pro-registration.html) 
+A DeepL API Key is required and can be created [here](https://www.deepl.com/pro?cta=header-prices#developer/) 
+
+### FREE DEEPL API KEY + 500.000 Words monthly
+You can register for new Deepl Free API  [here](https://www.deepl.com/pro?cta=header-prices#developer/)
 
 Currently Supported Languages:
 
-* German (de)
-* English
-* French
-* Italian
-* Spanish
-* Dutch
-* Polish
+* "BG" - Bulgarian
+* "CS" - Czech
+* "DA" - Danish
+* "DE" - German
+* "EL" - Greek
+* "EN" - English
+* "ES" - Spanish
+* "ET" - Estonian
+* "FI" - Finnish
+* "FR" - French
+* "HU" - Hungarian
+* "IT" - Italian
+* "JA" - Japanese
+* "LT" - Lithuanian
+* "LV" - Latvian
+* "NL" - Dutch
+* "PL" - Polish
+* "PT" - Portuguese (all Portuguese varieties mixed)
+* "RO" - Romanian
+* "RU" - Russian
+* "SK" - Slovak
+* "SL" - Slovenian
+* "SV" - Swedish
+* "ZH" - Chinese
 
 ## Installation
 ### Requirements
@@ -51,7 +71,9 @@ Aromicon Deepl Translation Configuration can be found under ```Stores > Configur
 
 First, you need to Specifiy your Default Storeview, this is your storeview where you normally add your content ind your default language.
 
-Second, you need to enter your API Key provided by [DeepL Pro](https://www.deepl.com/pro.html).
+Second, you need to chosse between API Version wih depends on Your Account. You can choose "Free" or "Pro"
+
+Third, you need to enter your API Key provided by [DeepL Pro](https://www.deepl.com/pro.html).
 
 You can also configure, which fields should be translated by default for CMS Pages, Products and Categories.
 
@@ -104,6 +126,6 @@ You are looking for Batch Translation from Backend or Console? Try our [Aromicon
 Pull request, issues and features are always welcome.
 
 <p align="center">
-<small>We ❤ Magento.</small><br/>
-  <small>Made by <a href="https://www.aromicon.de" target="_blank">aromicon</a></small>
+<small>We ❤ Magento. by [aromicon](https://www.aromicon.de)</small><br/>
+<small>Made by [aromicon](https://www.aromicon.de)</small>
 </p>

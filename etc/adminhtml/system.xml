@@ -30,6 +30,10 @@
             </group>
             <group id="api" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Deepl API</label>
+                <field id="version" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>API Version</label>
+                    <source_model>Aromicon\Deepl\Model\System\Config\Version</source_model>
+                </field>
                 <field id="key" translate="label" type="password" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>API Key</label>
                 </field>

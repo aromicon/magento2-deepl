@@ -8,6 +8,7 @@
  */
 namespace Aromicon\Deepl\Helper;
 
+use Aromicon\Deepl\Model\System\Config\Version;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
@@ -19,6 +20,8 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEFAULT_SPLIT_SENTENCE = 'deepl/general/split_sentence';
     const XML_PATH_DEFAULT_FORMALITY = 'deepl/general/formality';
     const XML_PATH_DEEPL_API_URL = 'deepl/api/url';
+    const XML_PATH_DEEPL_API_URL_FREE = 'deepl/api/url_free';
+    const XML_PATH_DEEPL_API_VERSION = 'deepl/api/version';
     const XML_PATH_DEEPL_API_KEY = 'deepl/api/key';
     const XML_PATH_DEEPL_CMS_PAGE_FIELDS = 'deepl/cms/page_fields';
     const XML_PATH_DEEPL_PRODUCT_FIELDS = 'deepl/product/product_fields';
@@ -78,11 +81,26 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLanguageCodeByStoreId($storeId)
     {
-        return mb_strtoupper(mb_substr($this->scopeConfig->getValue(
+        $language = $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_LOCALE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
-        ), 0, 2));
+        );
+
+        if ($language == 'en_GB') {
+            return 'EN-GB';
+        } elseif(strpos($language, 'en') === 0) {
+            return 'EN-US';
+        }
+
+        //Switch for Portuguese
+        if ($language == 'pt_BR') {
+            return 'PT-BR';
+        } elseif(strpos($language, 'pt') === 0) {
+            return 'PT-PT';
+        }
+
+        return mb_strtoupper(mb_substr($language, 0, 2));
     }
 
     /**
@@ -114,8 +132,27 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getDeeplApiUrl()
     {
+        if ($this->getDeeplApiVersion() == Version::FREE) {
+            return $this->scopeConfig->getValue(
+                self::XML_PATH_DEEPL_API_URL_FREE
+            );
+        }
+
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEEPL_API_URL
+        );
+    }
+
+    /**
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getDeeplApiVersion($storeId = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DEEPL_API_VERSION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
         );
     }
 

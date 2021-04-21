@@ -15,7 +15,12 @@ use Zend\Http\Request;
 
 class Deepl implements TranslatorInterface
 {
-    const AVAILABLE_LANGUAGES = ['EN','DE','FR','ES','IT','NL','PL'];
+    const AVAILABLE_LANGUAGES = [
+        'BG', 'CS', 'DA', 'DE', 'EL', 'EN-GB', 'EN-US', 'EN',
+        'ES', 'ET', 'FI', 'FR', 'HU', 'IT', 'JA', 'LT',
+        'LV', 'NL', 'PL', 'PT-PT', 'PT-BR', 'PT', 'RO', 'RU',
+        'SK', 'SL', 'SV', 'ZH',
+    ];
     /**
      * @var \Aromicon\Deepl\Helper\Config
      */
@@ -81,8 +86,11 @@ class Deepl implements TranslatorInterface
             ->set('target_lang', $targetLanguage)
             ->set('tag_handling', 'xml')
             ->set('preserve_formatting', 1)
-            ->set('split_sentences', $this->config->getSplitSentences())
-            ->set('formality', $this->config->getFormality());
+            ->set('split_sentences', $this->config->getSplitSentences());
+
+        if (in_array($targetLanguage, array('DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'))) {
+            $post->set('formality', $this->config->getFormality());
+        }
 
         $request->setPost($post);
         $result = $this->client->send($request);
