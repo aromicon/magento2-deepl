@@ -104,6 +104,7 @@ class Page
 
             $translatedPage->setData($field, $translatedText);
         }
+
         $this->removeStoreFromPage($page, $toStoreId);
 
         $this->pageRepository->save($page);

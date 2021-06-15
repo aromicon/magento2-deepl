@@ -33,22 +33,29 @@ class Block
     private $config;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+    /**
      * Block constructor.
      * @param \Magento\Cms\Api\BlockRepositoryInterface $blockRepository
      * @param \Magento\Cms\Api\Data\BlockInterfaceFactory $blockInterfaceFactory
      * @param \Aromicon\Deepl\Api\TranslatorInterface $translator
      * @param \Aromicon\Deepl\Helper\Config $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Cms\Api\BlockRepositoryInterface $blockRepository,
         \Magento\Cms\Api\Data\BlockInterfaceFactory $blockInterfaceFactory,
         \Aromicon\Deepl\Api\TranslatorInterface $translator,
-        \Aromicon\Deepl\Helper\Config $config
+        \Aromicon\Deepl\Helper\Config $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManagement
     ) {
         $this->blockRepository = $blockRepository;
         $this->blockInterfaceFactory = $blockInterfaceFactory;
         $this->translator = $translator;
         $this->config = $config;
+        $this->storeManager = $storeManagement;
     }
 
     /**
@@ -59,6 +66,7 @@ class Block
      */
     public function translateAndCopy($blockId, $toStoreId)
     {
+        /** @var \Magento\Cms\Model\Block $block */
         $block = $this->blockRepository->getById($blockId);
 
         $sourceLanguage = $this->config->getSourceLanguage();
@@ -75,8 +83,28 @@ class Block
             ->setIdentifier($block->getIdentifier())
             ->setStoreId($toStoreId);
 
-        $this->blockRepository->save($translatedBlock);
+        $this->removeStoreFromBlock($block, $toStoreId);
+
         $this->blockRepository->save($block);
+        $this->blockRepository->save($translatedBlock);
     }
 
+    /**
+     * @param \Magento\Cms\Model\Block $block
+     * @param $storeId
+     */
+    protected function removeStoreFromBlock($block, $storeId)
+    {
+        if (isset($block->getStoreId()[0]) && $block->getStoreId()[0] == 0) {
+            $allStores = $this->storeManager->getStores();
+
+            foreach ($allStores as $store) {
+                $allStoreIds[] = $store->getId();
+            }
+        } else {
+            $allStoreIds = $block->getStoreId();
+        }
+
+        $block->setStoreId(array_diff($allStoreIds, [$storeId]));
+    }
 }
