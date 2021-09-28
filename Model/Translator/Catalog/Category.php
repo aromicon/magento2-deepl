@@ -47,10 +47,10 @@ class Category
      */
     public function translateAndCopy($categoryId, $toStoreId)
     {
-        $sourceCategory = $this->categoryRepository->get($categoryId, $this->config->getSourceStoreId());
+        $sourceCategory = $this->categoryRepository->get($categoryId, $this->config->getSourceStoreId($toStoreId));
         $category = $this->categoryRepository->get($categoryId, $toStoreId);
 
-        $sourceLanguage = $this->config->getSourceLanguage();
+        $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
 
         $categoryFields = $this->config->getTranslatableCategoryFields();

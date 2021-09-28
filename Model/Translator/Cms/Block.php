@@ -69,7 +69,7 @@ class Block
         /** @var \Magento\Cms\Model\Block $block */
         $block = $this->blockRepository->getById($blockId);
 
-        $sourceLanguage = $this->config->getSourceLanguage();
+        $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
         /** @var  \Magento\Cms\Api\Data\BlockInterface $translatedBlock */
         $translatedBlock = $this->blockInterfaceFactory->create();

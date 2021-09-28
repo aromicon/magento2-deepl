@@ -48,10 +48,10 @@ class Product
      */
     public function translateAndCopy($productId, $toStoreId)
     {
-        $sourceProduct = $this->productRepository->getById($productId, true, $this->config->getSourceStoreId());
+        $sourceProduct = $this->productRepository->getById($productId, true, $this->config->getSourceStoreId($toStoreId));
         $product = $this->productRepository->getById($productId, true, $toStoreId);
 
-        $sourceLanguage = $this->config->getSourceLanguage();
+        $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
 
         $pageFields = $this->config->getTranslatableProductFields();

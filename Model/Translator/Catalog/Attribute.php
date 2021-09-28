@@ -14,7 +14,7 @@ class Attribute
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
     private $attributeRepository;
-    
+
     /**
      * @var \Aromicon\Deepl\Api\TranslatorInterface
      */
@@ -59,7 +59,7 @@ class Attribute
         /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
         $attribute = $this->attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $attributeId);
 
-        $sourceLanguage = $this->config->getSourceLanguage();
+        $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
 
         $labels = $attribute->getStoreLabels();

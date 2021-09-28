@@ -106,10 +106,12 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return mixed|null|string|string[]
      */
-    public function getSourceStoreId()
+    public function getSourceStoreId($storeId = null)
     {
         $storeId = $this->scopeConfig->getValue(
-            self::XML_PATH_DEFAULT_STORE
+            self::XML_PATH_DEFAULT_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
         );
 
         return $storeId;
@@ -118,12 +120,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return mixed|null|string|string[]
      */
-    public function getSourceLanguage()
+    public function getSourceLanguage($storeId = null)
     {
-        $storeId = $this->scopeConfig->getValue(
-            self::XML_PATH_DEFAULT_STORE
-        );
-
+        $storeId = $this->getSourceStoreId($storeId);
         return $this->getLanguageCodeByStoreId($storeId);
     }
 

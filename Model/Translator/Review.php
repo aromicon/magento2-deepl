@@ -18,6 +18,11 @@ class Review
     protected $reviewCollectionFactory;
 
     /**
+     * @var \Magento\Review\Model\ResourceModel\Rating\CollectionFactory
+     */
+    protected $ratingCollectionFactory;
+
+    /**
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $reviewFactory;
@@ -42,9 +47,11 @@ class Review
     public function __construct(
         \Magento\Review\Model\ResourceModel\Review\CollectionFactory $reviewCollectionFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
+        \Magento\Review\Model\ResourceModel\Rating\Option\Vote\CollectionFactory $ratingCollectionFactory,
         \Aromicon\Deepl\Api\TranslatorInterface $translator,
         \Aromicon\Deepl\Helper\Config $config
     ) {
+        $this->ratingCollectionFactory = $ratingCollectionFactory;
         $this->reviewCollectionFactory = $reviewCollectionFactory;
         $this->reviewFactory = $reviewFactory;
         $this->translator = $translator;
@@ -66,7 +73,7 @@ class Review
             throw new LocalizedException(__('Duplicate found for Review ID %1', $reviewId));
         }
 
-        $sourceLanguage = $this->config->getSourceLanguage();
+        $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
 
         $translatedTitle = $this->translator->translate($review->getTitle(), $sourceLanguage, $targetLanguage);
@@ -74,7 +81,8 @@ class Review
 
         $translatedReview = clone $review;
 
-        $translatedReview->setId(null)->setDetailId(null)
+        $translatedReview->setId(null)
+            ->setDetailId(null)
             ->setStores([$toStoreId])
             ->setStoreId($toStoreId)
             ->setTitle($translatedTitle)
@@ -83,6 +91,8 @@ class Review
         $translatedReview->save();
         //Bug Fixing Wrong Date at Model Save
         $translatedReview->setCreatedAt($review->getCreatedAt())->save();
+
+        $this->copyRatings($review, $translatedReview);
     }
 
     /**
@@ -100,5 +110,23 @@ class Review
             ->addFieldToFilter('nickname', $review->getNickname());
 
         return !empty($collection->getAllIds());
+    }
+
+    /**
+     * @param \Magento\Review\Model\Review $review
+     * @param \Magento\Review\Model\Review $translatedReview
+     */
+    public function copyRatings($review, $translatedReview)
+    {
+        /** @var \Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection $collection */
+        $collection = $this->ratingCollectionFactory->create();
+        $collection->setReviewFilter($review->getId());
+
+        foreach ($collection->getItems() as $vote) {
+            $copyVote = clone $vote;
+            $copyVote->setVoteId(null)
+                ->setReviewId($translatedReview->getId())
+                ->save();
+        }
     }
 }
