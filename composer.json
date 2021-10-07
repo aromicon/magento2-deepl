@@ -6,14 +6,7 @@
         "magento/module-catalog": "102.0.*|103.0.*|104.0.*",
         "magento/magento-composer-installer": "*"
     },
-    "suggest": {
-
-    },
     "type": "magento2-module",
-    "version": "2.0.0.8",
-    "license": [
-
-    ],
     "autoload": {
         "files": [
             "registration.php"
