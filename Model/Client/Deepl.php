@@ -43,11 +43,13 @@ class Deepl implements TranslatorInterface
 
     public function __construct(
         \Aromicon\Deepl\Helper\Config $config,
-        \Zend\Http\Client $client,
+        \Laminas\Http\Client $client,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->config = $config;
-        $this->client = $client;
+        $this->client = $client->setOptions([
+            'timeout' => $this->config->getTimeout()
+        ]);
         $this->logger = $logger;
     }
 

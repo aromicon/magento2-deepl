@@ -17,8 +17,8 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
     const XML_PATH_DEFAULT_STORE = 'deepl/general/store';
-    const XML_PATH_DEFAULT_SPLIT_SENTENCE = 'deepl/general/split_sentence';
-    const XML_PATH_DEFAULT_FORMALITY = 'deepl/general/formality';
+    const XML_PATH_DEFAULT_SPLIT_SENTENCE = 'deepl/api/split_sentence';
+    const XML_PATH_DEFAULT_FORMALITY = 'deepl/api/formality';
     const XML_PATH_DEEPL_API_URL = 'deepl/api/url';
     const XML_PATH_DEEPL_API_URL_FREE = 'deepl/api/url_free';
     const XML_PATH_DEEPL_API_VERSION = 'deepl/api/version';
@@ -27,6 +27,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEEPL_PRODUCT_FIELDS = 'deepl/product/product_fields';
     const XML_PATH_DEEPL_CATEGORY_FIELDS = 'deepl/category/category_fields';
     const XML_PATH_DEEPL_LOG_ENABLE = 'deepl/log/enable_log';
+    const XML_PATH_DEEPL_TIMEOUT = 'deepl/api/timeout';
 
     /**
      * @var \Aromicon\Deepl\Model\System\Config\PageFields
@@ -280,5 +281,17 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $formality;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        $value = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_DEEPL_TIMEOUT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $value > 0 ? $value : 30;
     }
 }
