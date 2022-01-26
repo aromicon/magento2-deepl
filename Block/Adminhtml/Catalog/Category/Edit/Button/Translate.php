@@ -8,16 +8,17 @@
  */
 namespace Aromicon\Deepl\Block\Adminhtml\Catalog\Category\Edit\Button;
 
-use Magento\Framework\Registry;
-use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Ui\Component\Control\Container;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
+use Magento\Framework\AuthorizationInterface;
+
 /**
  * Class Translate
  */
 class Translate extends AbstractCategory implements ButtonProviderInterface
 {
+    private $authorization;
     private $storeManagement;
     private $config;
 
@@ -28,10 +29,12 @@ class Translate extends AbstractCategory implements ButtonProviderInterface
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Aromicon\Deepl\Helper\Config $config,
         \Magento\Store\Model\StoreManagerInterface $storeManagement,
+        AuthorizationInterface $authorization,
         array $data = []
     ) {
         $this->config = $config;
         $this->storeManagement = $storeManagement;
+        $this->authorization = $authorization;
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
     }
 
@@ -40,7 +43,10 @@ class Translate extends AbstractCategory implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if ($this->getCategory()->isReadonly() || !$this->config->hasApiKey()) {
+        if ($this->getCategory()->isReadonly()
+            || !$this->config->hasApiKey()
+            || !$this->authorization->isAllowed('Aromicon_Deepl::translate_category')
+        ) {
             return [];
         }
 

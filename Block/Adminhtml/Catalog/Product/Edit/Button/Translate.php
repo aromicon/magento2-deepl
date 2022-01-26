@@ -11,12 +11,14 @@ namespace Aromicon\Deepl\Block\Adminhtml\Catalog\Product\Edit\Button;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Ui\Component\Control\Container;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Class Save
  */
 class Translate extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic
 {
+    private $authorization;
     private $storeManagement;
     private $config;
 
@@ -24,10 +26,12 @@ class Translate extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Gen
         Context $context,
         Registry $registry,
         \Aromicon\Deepl\Helper\Config $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManagement
+        \Magento\Store\Model\StoreManagerInterface $storeManagement,
+        AuthorizationInterface $authorization
     ) {
         $this->config = $config;
         $this->storeManagement = $storeManagement;
+        $this->authorization = $authorization;
         parent::__construct($context, $registry);
     }
 
@@ -36,7 +40,9 @@ class Translate extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Gen
      */
     public function getButtonData()
     {
-        if ($this->getProduct()->isReadonly() || !$this->config->hasApiKey()) {
+        if ($this->getProduct()->isReadonly()
+            || !$this->config->hasApiKey()
+            || !$this->authorization->isAllowed('Aromicon_Deepl::translate_product')) {
             return [];
         }
 

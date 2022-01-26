@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Catalog
 {
-
+    const ADMIN_RESOURCE = 'Aromicon_Deepl::translate_product';
     /**
      * @var \Aromicon\Deepl\Model\Translator\Catalog\Product
      */

@@ -14,6 +14,8 @@ use Magento\Framework\Controller\ResultFactory;
 class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Review
 {
 
+    const ADMIN_RESOURCE = 'Aromicon_Deepl::translate_review';
+
     /** @var \Aromicon\Deepl\Model\Translator\Review  */
     protected $reviewTranslator;
 

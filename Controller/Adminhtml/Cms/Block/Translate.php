@@ -13,6 +13,8 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
 {
+    const ADMIN_RESOURCE = 'Aromicon_Deepl::translate_block';
+
     /**
      * @var \Aromicon\Deepl\Model\Translator\Cms\Block
      */

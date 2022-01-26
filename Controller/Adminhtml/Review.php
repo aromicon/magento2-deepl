@@ -10,7 +10,7 @@ namespace Aromicon\Deepl\Controller\Adminhtml;
 
 abstract class Review extends \Magento\Backend\App\Action
 {
-    const ADMIN_RESOURCE = 'Aromicon_Deepl::review';
+    const ADMIN_RESOURCE = 'Aromicon_Deepl::translate_review';
 
     /**
      * @var \Magento\Framework\Registry
