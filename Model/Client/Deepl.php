@@ -10,16 +10,42 @@
 namespace Aromicon\Deepl\Model\Client;
 
 use Aromicon\Deepl\Api\TranslatorInterface;
+use Laminas\Http\Client;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Magento\Framework\Exception\LocalizedException;
-use Zend\Http\Request;
 
 class Deepl implements TranslatorInterface
 {
     const AVAILABLE_LANGUAGES = [
-        'BG', 'CS', 'DA', 'DE', 'EL', 'EN-GB', 'EN-US', 'EN',
-        'ES', 'ET', 'FI', 'FR', 'HU', 'IT', 'JA', 'LT',
-        'LV', 'NL', 'PL', 'PT-PT', 'PT-BR', 'PT', 'RO', 'RU',
-        'SK', 'SL', 'SV', 'ZH',
+        'BG',
+        'CS',
+        'DA',
+        'DE',
+        'EL',
+        'EN-GB',
+        'EN-US',
+        'EN',
+        'ES',
+        'ET',
+        'FI',
+        'FR',
+        'HU',
+        'IT',
+        'JA',
+        'LT',
+        'LV',
+        'NL',
+        'PL',
+        'PT-PT',
+        'PT-BR',
+        'PT',
+        'RO',
+        'RU',
+        'SK',
+        'SL',
+        'SV',
+        'ZH',
     ];
     /**
      * @var \Aromicon\Deepl\Helper\Config
@@ -27,7 +53,7 @@ class Deepl implements TranslatorInterface
     private $config;
 
     /**
-     * @var \Zend\Http\Client
+     * @var Client
      */
     private $client;
 
@@ -43,13 +69,11 @@ class Deepl implements TranslatorInterface
 
     public function __construct(
         \Aromicon\Deepl\Helper\Config $config,
-        \Laminas\Http\Client $client,
+        Client $client,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->config = $config;
-        $this->client = $client->setOptions([
-            'timeout' => $this->config->getTimeout()
-        ]);
+        $this->client = $client;
         $this->logger = $logger;
     }
 
@@ -73,9 +97,10 @@ class Deepl implements TranslatorInterface
      */
     public function translate($string, $sourceLanguage, $targetLanguage)
     {
-        $request = $this->client->getRequest()
-            ->setUri($this->config->getDeeplApiUrl().'translate')
-            ->setMethod(Request::METHOD_POST);
+        $client = $this->getClient();
+        $request = $client->getRequest()
+            ->setUri($this->config->getDeeplApiUrl() . 'translate')
+            ->setMethod(\Laminas\Http\Request::METHOD_POST);
 
         if (!in_array($targetLanguage, self::AVAILABLE_LANGUAGES)) {
             throw new LocalizedException(__('Target Language is not available!'));
@@ -95,7 +120,7 @@ class Deepl implements TranslatorInterface
         }
 
         $request->setPost($post);
-        $result = $this->client->send($request);
+        $result = $client->send($request);
 
         if ($this->config->isLogEnabled()) {
             $this->logger->info('Deepl Request', [$post]);
@@ -123,15 +148,16 @@ class Deepl implements TranslatorInterface
      */
     public function getUsage()
     {
-        $request = $this->client->getRequest()
-            ->setUri($this->config->getDeeplApiUrl().'usage')
+        $client = $this->getClient();
+        $request = $client->getRequest()
+            ->setUri($this->config->getDeeplApiUrl() . 'usage')
             ->setMethod(Request::METHOD_GET);
 
         $query = $request->getQuery();
         $query->set('auth_key', $this->config->getDeeplApiKey());
 
         $request->setQuery($query);
-        $result = $this->client->send($request);
+        $result = $client->send($request);
 
         if ($this->_hasError($result)) {
             $this->_handleError($result);
@@ -191,7 +217,7 @@ class Deepl implements TranslatorInterface
     }
 
     /**
-     * @param \Zend\Http\Response $response
+     * @param Response $response
      */
     protected function _hasError($response)
     {
@@ -199,7 +225,7 @@ class Deepl implements TranslatorInterface
     }
 
     /**
-     * @param \Zend\Http\Response $response
+     * @param Response $response
      * @throws LocalizedException
      */
     protected function _handleError($response)
@@ -218,5 +244,17 @@ class Deepl implements TranslatorInterface
         } else {
             throw new LocalizedException(__('Status %1. %2.', $status, $response->getReasonPhrase()));
         }
+    }
+
+    /**
+     * @return Client
+     */
+    private function getClient(): Client
+    {
+        return $this->client->setOptions(
+            [
+                'timeout' => $this->config->getTimeout()
+            ]
+        );
     }
 }
