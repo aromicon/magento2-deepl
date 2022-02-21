@@ -60,7 +60,7 @@ class Attribute
         $attribute = $this->attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $attributeId);
 
         $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
-        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
+        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId, true);
 
         $labels = $attribute->getStoreLabels();
         $srcLabel = $attribute->getDefaultFrontendLabel();

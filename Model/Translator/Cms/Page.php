@@ -79,7 +79,7 @@ class Page
         $page = $this->pageRepository->getById($pageId);
 
         $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
-        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
+        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId, true);
         /** @var  \Magento\Cms\Api\Data\PageInterface $translatedPage */
         $translatedPage = $this->pageInterfaceFactory->create();
 

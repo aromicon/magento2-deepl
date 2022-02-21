@@ -51,7 +51,7 @@ class Category
         $category = $this->categoryRepository->get($categoryId, $toStoreId);
 
         $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
-        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
+        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId, true);
 
         $categoryFields = $this->config->getTranslatableCategoryFields();
 

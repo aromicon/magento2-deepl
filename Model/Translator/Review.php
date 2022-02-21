@@ -74,7 +74,7 @@ class Review
         }
 
         $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
-        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId);
+        $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId, true);
 
         $translatedTitle = $this->translator->translate($review->getTitle(), $sourceLanguage, $targetLanguage);
         $translatedDetail = $this->translator->translate($review->getDetail(), $sourceLanguage, $targetLanguage);

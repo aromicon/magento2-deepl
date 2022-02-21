@@ -73,14 +73,14 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
         $language = \Locale::getPrimaryLanguage($locale);
 
-        return  $label = $languages[$language];
+        return  $languages[$language];
     }
 
     /**
      * @param $storeId
      * @return mixed|null|string|string[]
      */
-    public function getLanguageCodeByStoreId($storeId)
+    public function getLanguageCodeByStoreId($storeId, $isTarget = false)
     {
         $language = $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_LOCALE,
@@ -88,17 +88,19 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             $storeId
         );
 
-        if ($language == 'en_GB') {
-            return 'EN-GB';
-        } elseif(strpos($language, 'en') === 0) {
-            return 'EN-US';
-        }
+        if ($isTarget) {
+            if ($language == 'en_GB') {
+                return 'EN-GB';
+            } elseif(strpos($language, 'en') === 0) {
+                return 'EN-US';
+            }
 
-        //Switch for Portuguese
-        if ($language == 'pt_BR') {
-            return 'PT-BR';
-        } elseif(strpos($language, 'pt') === 0) {
-            return 'PT-PT';
+            //Switch for Portuguese
+            if ($language == 'pt_BR') {
+                return 'PT-BR';
+            } elseif(strpos($language, 'pt') === 0) {
+                return 'PT-PT';
+            }
         }
 
         return mb_strtoupper(mb_substr($language, 0, 2));
