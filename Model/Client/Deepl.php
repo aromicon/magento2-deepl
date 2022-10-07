@@ -123,8 +123,8 @@ class Deepl implements TranslatorInterface
         $result = $client->send($request);
 
         if ($this->config->isLogEnabled()) {
-            $this->logger->info('Deepl Request', [$post]);
-            $this->logger->info('Deepl Response', [$result]);
+            $this->logger->info('Deepl Request: ', [$post]);
+            $this->logger->info('Deepl Response: ', [$result]);
         }
 
         if ($this->_hasError($result)) {
@@ -137,7 +137,7 @@ class Deepl implements TranslatorInterface
             throw new LocalizedException(__('Translation is empty.'));
         }
 
-        $translatedText = $translate['translations'][0]['text'];
+        $translatedText = str_replace(['{{{', '}}}'], ['{{', '}}'], $translate['translations'][0]['text']);
 
         return $translatedText;
     }
