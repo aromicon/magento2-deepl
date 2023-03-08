@@ -59,14 +59,19 @@ class Attribute
         /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
         $attribute = $this->attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $attributeId);
 
+        $sourceStoreId = $this->config->getSourceStoreId($toStoreId);
         $sourceLanguage = $this->config->getSourceLanguage($toStoreId);
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId, true);
 
         $labels = $attribute->getStoreLabels();
-        $srcLabel = $attribute->getDefaultFrontendLabel();
+        $srcLabel = array_key_exists($sourceStoreId, $labels)
+            ? $labels[$sourceStoreId]
+            : $attribute->getDefaultFrontendLabel();
         $labels[$toStoreId] = $this->translator->translate($srcLabel, $sourceLanguage, $targetLanguage);
         $attribute->setStoreLabels($labels);
+        $this->attributeRepository->save($attribute);
 
+        $attribute->setStoreId($sourceStoreId);
         if (in_array($attribute->getFrontendInput(), ['select','multiselect'])
             && in_array(get_class($attribute->getSource()), [\Magento\Eav\Model\Entity\Attribute\Source\Table::class, null])) {
             $options = $attribute->getOptions();
@@ -84,8 +89,6 @@ class Attribute
                 }
             }
         }
-
-        $this->attributeRepository->save($attribute);
     }
 
     /**
