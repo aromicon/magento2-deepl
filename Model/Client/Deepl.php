@@ -45,6 +45,7 @@ class Deepl implements TranslatorInterface
         'SK',
         'SL',
         'SV',
+        'UK',
         'ZH',
     ];
     /**
