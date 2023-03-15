@@ -45,9 +45,10 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Catalog
         try {
             $this->productTranslator->translateAndCopy($productId, $store);
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Product couldn\'t be translated. %1', $e->getMessage()));
+            $this->messageManager->addErrorMessage(__('Product couldn\'t be translated. %1', $e->getMessage()));
         }
 
+        $this->messageManager->addSuccessMessage(__('Product was translated successfully'));
         $this->_redirect('catalog/product/edit', ['id' => $productId]);
     }
 }
