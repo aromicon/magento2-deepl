@@ -41,6 +41,10 @@
                     <label>API Timeout</label>
                     <comment>API Call Timeout in sec. Default 30 sec.</comment>
                 </field>
+                <field id="tag_handling" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Tag Handling</label>
+                    <source_model>Aromicon\Deepl\Model\System\Config\TagHandling</source_model>
+                </field>
                 <field id="split_sentence" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Split Sentences</label>
                     <source_model>Aromicon\Deepl\Model\System\Config\SplitSentence</source_model>

@@ -31,10 +31,13 @@ class Deepl implements TranslatorInterface
         'FI',
         'FR',
         'HU',
+        'ID',
         'IT',
         'JA',
+        'KO',
         'LT',
         'LV',
+        'NB',
         'NL',
         'PL',
         'PT-PT',
@@ -45,6 +48,7 @@ class Deepl implements TranslatorInterface
         'SK',
         'SL',
         'SV',
+        'TR',
         'UK',
         'ZH',
     ];
@@ -112,7 +116,7 @@ class Deepl implements TranslatorInterface
             ->set('text', $string)
             ->set('source_lang', $sourceLanguage)
             ->set('target_lang', $targetLanguage)
-            ->set('tag_handling', 'xml')
+            ->set('tag_handling', $this->config->getTagHandling())
             ->set('preserve_formatting', 1)
             ->set('split_sentences', $this->config->getSplitSentences());
 

@@ -28,6 +28,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEEPL_CATEGORY_FIELDS = 'deepl/category/category_fields';
     const XML_PATH_DEEPL_LOG_ENABLE = 'deepl/log/enable_log';
     const XML_PATH_DEEPL_TIMEOUT = 'deepl/api/timeout';
+    const XML_PATH_DEEPL_TAG_HANDLING = 'deepl/api/tag_handling';
 
     /**
      * @var \Aromicon\Deepl\Model\System\Config\PageFields
@@ -295,5 +296,18 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $value > 0 ? $value : 30;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTagHandling()
+    {
+        $value = $this->scopeConfig->getValue(
+            self::XML_PATH_DEEPL_TAG_HANDLING,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        return !empty($value) ? $value : 'xml';
     }
 }
