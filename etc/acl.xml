@@ -17,6 +17,13 @@
                     <resource id="Aromicon_Deepl::translate_page" title="Translate CMS Pages" translate="title" sortOrder="50" />
                     <resource id="Aromicon_Deepl::translate_review" title="Translate Reviews" translate="title" sortOrder="60" />
                 </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Aromicon_Deepl::config" title="Aromicon Deepl Configuration" translate="title" sortOrder="1000" />
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>
