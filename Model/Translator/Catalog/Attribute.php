@@ -8,6 +8,8 @@
  */
 namespace Aromicon\Deepl\Model\Translator\Catalog;
 
+use Magento\Eav\Api\Data\AttributeOptionInterface;
+
 class Attribute
 {
     /**
@@ -31,7 +33,7 @@ class Attribute
     private $productResource;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Attribute
      */
     private $attributeResource;
 
@@ -68,11 +70,13 @@ class Attribute
             ? $labels[$sourceStoreId]
             : $attribute->getDefaultFrontendLabel();
         $labels[$toStoreId] = $this->translator->translate($srcLabel, $sourceLanguage, $targetLanguage);
+
         $attribute->setStoreLabels($labels);
         $this->attributeRepository->save($attribute);
 
         $attribute->setStoreId($sourceStoreId);
-        if (in_array($attribute->getFrontendInput(), ['select','multiselect'])
+
+        if (in_array($attribute->getFrontendInput(), ['select', 'multiselect'])
             && in_array(get_class($attribute->getSource()), [\Magento\Eav\Model\Entity\Attribute\Source\Table::class, null])) {
             $options = $attribute->getOptions();
 
@@ -85,29 +89,41 @@ class Attribute
                     $srcOptionLabel = $option->getLabel();
                     $translatedOptionLabel = $this->translator
                         ->translate($srcOptionLabel, $sourceLanguage, $targetLanguage);
-                    $this->saveAttributeOption($option->getValue(), $translatedOptionLabel, $toStoreId);
+
+                    $this->saveAttributeOption($option, $translatedOptionLabel, $toStoreId);
                 }
             }
         }
     }
 
     /**
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param AttributeOptionInterface $option
+     * @param string $value
+     * @param int|string $storeId
      */
-    protected function saveAttributeOption($optionId, $value, $storeId)
+    protected function saveAttributeOption($option, $value, $storeId)
     {
+        $optionId = $option->getValue();
         $connection = $this->attributeResource->getConnection();
         $table = $this->attributeResource->getTable('eav_attribute_option_value');
 
-        $connection->delete($table, ['option_id = ?' => $optionId, 'store_id = ?' => $storeId]);
+        $select = $connection->select()
+                    ->from($table)
+                    ->where('option_id = ?', $optionId)
+                    ->where('store_id = ?', $storeId);
 
-        $optionValue = [
-            'option_id' => $optionId,
-            'store_id' => $storeId,
-            'value' => $value
-        ];
+        $result = $connection->fetchOne($select);
 
-        $connection->insert($table, $optionValue);
+        if ($result) {
+            $connection->update($table, ['value' => $value], ['option_id = ?' => $optionId, 'store_id = ?' => $storeId]);
+        } else {
+            $optionValue = [
+                'option_id' => $optionId,
+                'store_id' => $storeId,
+                'value' => $value
+            ];
+
+            $connection->insert($table, $optionValue);
+        }
     }
 }
