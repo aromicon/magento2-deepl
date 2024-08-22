@@ -105,7 +105,10 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
             if ('zh_Hant_HK' === $language || 'zh_Hant_TW' === $language) {
                 return 'ZH-HANT';
+            } elseif('zh_Hans_CN' === $language) {
+                return 'ZH-HANS';
             }
+
         }
 
         return mb_strtoupper(mb_substr($language, 0, 2));
