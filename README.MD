@@ -14,6 +14,7 @@ You can register for new Deepl Free API  [here](https://www.deepl.com/pro?cta=he
 
 Currently Supported Languages:
 
+* AR - Arabic
 * BG - Bulgarian
 * CS - Czech
 * DA - Danish
@@ -42,7 +43,8 @@ Currently Supported Languages:
 * SV - Swedish
 * TR - Turkish
 * UK - Ukrainian
-* ZH - Chinese
+* ZH - Chinese (Simplified)
+* ZH-HANT - Chinese (Traditional)
 
 ## Installation
 ### Requirements
