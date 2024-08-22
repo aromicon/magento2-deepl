@@ -18,6 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 class Deepl implements TranslatorInterface
 {
     const AVAILABLE_LANGUAGES = [
+        'AR',
         'BG',
         'CS',
         'DA',
@@ -51,6 +52,7 @@ class Deepl implements TranslatorInterface
         'TR',
         'UK',
         'ZH',
+        'ZH-HANT',
     ];
     /**
      * @var \Aromicon\Deepl\Helper\Config
