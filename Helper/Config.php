@@ -93,16 +93,22 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         if ($isTarget) {
             if ($language == 'en_GB') {
                 return 'EN-GB';
-            } elseif(strpos($language, 'en') === 0) {
+            } elseif(str_starts_with($language, 'en')) {
                 return 'EN-US';
             }
 
             //Switch for Portuguese
             if ($language == 'pt_BR') {
                 return 'PT-BR';
-            } elseif(strpos($language, 'pt') === 0) {
+            } elseif(str_starts_with($language, 'pt')) {
                 return 'PT-PT';
             }
+        }
+
+        if ($language == 'zh_Hans_CN') {
+            return 'ZH-HANS';
+        } elseif($language == 'zh_Hant_TW' || $language == 'zh_Hant_HK') {
+            return 'ZH-HANT';
         }
 
         return mb_strtoupper(mb_substr($language, 0, 2));
