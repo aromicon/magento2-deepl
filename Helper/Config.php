@@ -23,6 +23,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEEPL_API_URL_FREE = 'deepl/api/url_free';
     const XML_PATH_DEEPL_API_VERSION = 'deepl/api/version';
     const XML_PATH_DEEPL_API_KEY = 'deepl/api/key';
+    const XML_PATH_DEEPL_CMS_BLOCK_FIELDS = 'deepl/cms/block_fields';
     const XML_PATH_DEEPL_CMS_PAGE_FIELDS = 'deepl/cms/page_fields';
     const XML_PATH_DEEPL_PRODUCT_FIELDS = 'deepl/product/product_fields';
     const XML_PATH_DEEPL_CATEGORY_FIELDS = 'deepl/category/category_fields';
@@ -179,6 +180,28 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getTranslatableBlockFields()
+    {
+        $fields = $this->scopeConfig->getValue(
+            self::XML_PATH_DEEPL_CMS_BLOCK_FIELDS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        if (empty($fields)) {
+            $fields = [];
+            foreach ($this->pageFields->toOptionArray() as $item) {
+                $fields[] = $item['value'];
+            };
+        } else {
+            $fields = explode(',', $fields);
+        }
+
+        return $fields;
     }
 
     /**

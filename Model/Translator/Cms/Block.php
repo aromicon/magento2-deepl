@@ -73,8 +73,20 @@ class Block
         $targetLanguage = $this->config->getLanguageCodeByStoreId($toStoreId, true);
         /** @var  \Magento\Cms\Api\Data\BlockInterface $translatedBlock */
         $translatedBlock = $this->blockInterfaceFactory->create();
-        $translatedTitle = $this->translator->translate($block->getTitle(), $sourceLanguage, $targetLanguage);
-        $translatedContent = $this->translator->translate($block->getContent(), $sourceLanguage, $targetLanguage);
+
+        $blockFields = $this->config->getTranslatableBlockFields();
+
+        if (in_array('title', $blockFields)) {
+            $translatedTitle = $this->translator->translate($block->getTitle(), $sourceLanguage, $targetLanguage);
+        } else {
+            $translatedTitle = $block->getTitle();
+        }
+
+        if (in_array('content', $blockFields)) {
+            $translatedContent = $this->translator->translate($block->getContent(), $sourceLanguage, $targetLanguage);
+        } else {
+            $translatedContent = $block->getContent();
+        }
 
         $translatedBlock
             ->setTitle($translatedTitle)
