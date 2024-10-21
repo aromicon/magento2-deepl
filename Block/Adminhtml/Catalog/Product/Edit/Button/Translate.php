@@ -48,7 +48,7 @@ class Translate extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Gen
 
         return [
             'label' => __('Translate'),
-            'class' => 'save',
+            'class' => 'save options-scrollable',
             'class_name' => Container::SPLIT_BUTTON,
             'options' => $this->getOptions(),
         ];

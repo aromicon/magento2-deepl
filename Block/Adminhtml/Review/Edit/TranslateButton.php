@@ -54,8 +54,8 @@ class TranslateButton extends \Magento\Backend\Block\Widget\Container
         $addButtonProps = [
             'id' => 'translate_review',
             'label' => __('Translate'),
-            'class' => 'add',
-            'button_class' => '',
+            'class' => 'add options-scrollable',
+            'button_class' => 'options-scrollable',
             'class_name' => \Magento\Backend\Block\Widget\Button\SplitButton::class,
             'options' => $this->_getTranslateOptions(),
         ];

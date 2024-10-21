@@ -52,7 +52,7 @@ class Translate extends AbstractCategory implements ButtonProviderInterface
 
         return [
             'label' => __('Translate'),
-            'class' => 'save',
+            'class' => 'save options-scrollable',
             'class_name' => Container::SPLIT_BUTTON,
             'options' => $this->getOptions(),
         ];
