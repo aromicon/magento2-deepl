@@ -10,4 +10,14 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
   <preference for="Aromicon\Deepl\Api\TranslatorInterface" type="Aromicon\Deepl\Model\Client\Deepl"/>
+  <type name="Aromicon\Deepl\Model\Client\Deepl">
+    <arguments>
+      <argument name="directiveProcessors" xsi:type="array">
+        <item name="depend" sortOrder="100" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\DependDirective</item>
+        <item name="if" sortOrder="200" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\IfDirective</item>
+        <item name="template" sortOrder="300" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\TemplateDirective</item>
+        <item name="legacy" sortOrder="400" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\LegacyDirective</item>
+      </argument>
+    </arguments>
+  </type>
 </config>

@@ -10,10 +10,17 @@
 namespace Aromicon\Deepl\Model\Client;
 
 use Aromicon\Deepl\Api\TranslatorInterface;
+use Aromicon\Deepl\Helper\Config;
 use Laminas\Http\Client;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
+use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
+use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
+use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
+use Magento\Framework\Filter\DirectiveProcessorInterface;
 
 class Deepl implements TranslatorInterface
 {
@@ -55,34 +62,39 @@ class Deepl implements TranslatorInterface
         'ZH-HANS',
         'ZH-HANT'
     ];
-    /**
-     * @var \Aromicon\Deepl\Helper\Config
-     */
-    private $config;
 
-    /**
-     * @var Client
-     */
-    private $client;
 
-    /**
-     * @var int
-     */
-    private $usage;
+    private Config $config;
+    private Client $client;
+    private array $usage;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
+    private array $directives = [];
+    protected array $directiveProcessors;
 
     public function __construct(
-        \Aromicon\Deepl\Helper\Config $config,
+        Config $config,
         Client $client,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        array $directiveProcessors = [],
     ) {
         $this->config = $config;
         $this->client = $client;
         $this->logger = $logger;
+
+        if (empty($directiveProcessors)) {
+            $directiveProcessors = [
+                'depend' => ObjectManager::getInstance()->get(DependDirective::class),
+                'if' => ObjectManager::getInstance()->get(IfDirective::class),
+                'template' => ObjectManager::getInstance()->get(TemplateDirective::class),
+                'legacy' => ObjectManager::getInstance()->get(LegacyDirective::class),
+            ];
+        }
+
+        $this->directiveProcessors = $directiveProcessors;
     }
 
     /**
@@ -114,9 +126,12 @@ class Deepl implements TranslatorInterface
             throw new LocalizedException(__('Target Language is not available!'));
         }
 
+        $text = $this->replaceDirectives($string);
+
         $post = $request->getPost();
+
         $post->set('auth_key', $this->config->getDeeplApiKey())
-            ->set('text', $string)
+            ->set('text', $text)
             ->set('source_lang', $sourceLanguage)
             ->set('target_lang', $targetLanguage)
             ->set('tag_handling', $this->config->getTagHandling())
@@ -147,7 +162,7 @@ class Deepl implements TranslatorInterface
 
         $translatedText = str_replace(['{{{', '}}}'], ['{{', '}}'], $translate['translations'][0]['text']);
 
-        return $translatedText;
+        return $this->replacePlaceholders($translatedText);
     }
 
     /**
@@ -264,5 +279,39 @@ class Deepl implements TranslatorInterface
                 'timeout' => $this->config->getTimeout()
             ]
         );
+    }
+
+    private function replaceDirectives($value)
+    {
+        foreach ($this->directiveProcessors as $directiveProcessor) {
+            if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
+                throw new \InvalidArgumentException(
+                    'Directive processors must implement ' . DirectiveProcessorInterface::class
+                );
+            }
+
+            $pattern = $directiveProcessor->getRegularExpression();
+
+            if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
+                foreach ($constructions as $construction) {
+                    if (!empty($construction[0])) {
+                        $replaceName = '#'.uniqid().'#';
+                        $this->directives[$replaceName] = $construction[0];
+                        $value = str_replace($construction[0], $replaceName, $value);
+                    }
+                }
+            }
+        }
+
+        return $value;
+    }
+
+    private function replacePlaceholders($translatedString)
+    {
+        foreach ($this->directives as $replaceName => $directive) {
+            $translatedString = str_replace($replaceName, $directive, $translatedString);
+        }
+
+        return $translatedString;
     }
 }
