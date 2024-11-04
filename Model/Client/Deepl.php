@@ -66,7 +66,7 @@ class Deepl implements TranslatorInterface
 
     private Config $config;
     private Client $client;
-    private array $usage;
+    private array $usage = [];
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -223,7 +223,7 @@ class Deepl implements TranslatorInterface
      */
     public function getCharacterCount()
     {
-        if (!$this->usage) {
+        if (empty($this->usage)) {
             try {
                 $this->getUsage();
             } catch (LocalizedException $e) {
