@@ -47,7 +47,7 @@ class Translate extends \Aromicon\Deepl\Controller\Adminhtml\Cms
 
         try {
             $this->cmsTranslator->translateAndCopy($pageId, $store);
-            $this->messageManager->addSuccess(__('Page "%1" was copied & translated to Store %2.', $pageId, $store));
+            $this->messageManager->addSuccessMessage(__('Page "%1" was copied & translated to Store %2.', $pageId, $store));
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage(__('Page couldn\'t be translated. %1', $e->getMessage()));
         }
